@@ -1,25 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import useReactQueryWithProduct from './useReactQueryWithProduct';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const { products, loadingProducts, isError, error } =
+		useReactQueryWithProduct();
+	if (loadingProducts) {
+		console.log('Loading...');
+		return <div>Loading...</div>;
+	}
+
+	if (isError) {
+		console.log('Error: ', error.message);
+		return <div>Error...</div>;
+	}
+	console.log(products);
+	return (
+		<ul>
+			{products &&
+				products.map((product) => (
+					<div key={product.id}>
+						<p> {product.title}</p>
+						<img src={product.image} alt={product.title} />
+						<p>{product.price}</p>
+					</div>
+				))}
+		</ul>
+	);
 }
 
 export default App;
